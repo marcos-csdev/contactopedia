@@ -30,9 +30,6 @@ const Contact = (props) => {
           <i class="bi bi-star" style={{ fontSize: "1rem" }}></i>
         </button>
       </div>
-      <button className="btn btn-primary form-control">
-        {props.contact.name}
-      </button>
     </div>
   );
 };
