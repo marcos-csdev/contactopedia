@@ -37,14 +37,39 @@ class ContactIndex extends React.Component {
     };
   }
 
+  validateContact(newContact) {
+    if (newContact.name === "") {
+      return { status: "failure", msg: "Please enter a valid name" };
+    }
+
+    const hasDuplicates = this.state.contactList.filter((contact) => {
+      if (
+        contact.name == newContact.name ||
+        contact.phone == newContact.phone
+      ) {
+        return true;
+      }
+    });
+
+    if (hasDuplicates.length > 0) {
+      return { status: "failure", msg: "User exists" };
+    }
+  }
+
   handleAddContact = (newContact) => {
+    const validation = this.validateContact(newContact);
+    if (validation !== undefined) return validation;
+
     let contactLength = this.state.contactList.length;
-    newContact.id = contactLength + 1;
+    newContact.id = contactLength;
+
     this.setState((prevState) => {
       return {
         contactList: prevState.contactList.concat([newContact]),
       };
     });
+
+    return { status: "success", msg: "Contact created successfully" };
   };
 
   render() {
