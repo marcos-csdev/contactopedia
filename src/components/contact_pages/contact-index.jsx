@@ -57,6 +57,9 @@ class ContactIndex extends React.Component {
   }
 
   handleAddContact = (newContact) => {
+    if (newContact === null)
+      return { status: "error", msg: "No contact received" };
+
     const validation = this.validateContact(newContact);
     if (validation !== undefined) return validation;
 
@@ -72,15 +75,31 @@ class ContactIndex extends React.Component {
     return { status: "success", msg: "Contact created successfully" };
   };
 
-  handleToggleFavorites = (contact) => {
+  handleDeleteContact = (contact) => {
+    if (contact === null) return false;
     this.setState((prevState) => {
       return {
-        contactList: prevState.contactList.map((cont) => {
-          if (cont.id === contact.id) {
-            return { ...cont, isFavorite: !cont.isFavorite };
+        //returns all contacts which id are different from the parameter's
+        contactList: prevState.contactList.filter(
+          (listContact) => listContact.id !== contact.id
+        ),
+      };
+    });
+  };
+
+  handleToggleFavorites = (contact) => {
+    if (contact === null) return null;
+
+    this.setState((prevState) => {
+      return {
+        contactList: prevState.contactList.map((listContact) => {
+          //look for the contact in the favorites list
+          if (listContact.id === contact.id) {
+            //(...) = spread operator = SelectMany
+            return { ...listContact, isFavorite: !listContact.isFavorite }; //reverts favorite value
           }
 
-          return cont;
+          return listContact;
         }),
       };
     });
@@ -111,6 +130,7 @@ class ContactIndex extends React.Component {
                     (contact) => contact.isFavorite === true
                   )}
                   favoriteClick={this.handleToggleFavorites}
+                  deleteClick={this.handleDeleteContact}
                 />
               </div>
             </div>
@@ -121,6 +141,7 @@ class ContactIndex extends React.Component {
                     (contact) => contact.isFavorite === false
                   )}
                   favoriteClick={this.handleToggleFavorites}
+                  deleteClick={this.handleDeleteContact}
                 />
               </div>
             </div>
