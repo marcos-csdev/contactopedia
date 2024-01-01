@@ -44,11 +44,12 @@ class ContactIndex extends React.Component {
 
     const hasDuplicates = this.state.contactList.filter((contact) => {
       if (
-        contact.name == newContact.name ||
-        contact.phone == newContact.phone
+        contact.name === newContact.name ||
+        contact.phone === newContact.phone
       ) {
         return true;
       }
+      return false;
     });
 
     if (hasDuplicates.length > 0) {
@@ -68,6 +69,7 @@ class ContactIndex extends React.Component {
 
     this.setState((prevState) => {
       return {
+        //appends the newContact to the end of the list
         contactList: prevState.contactList.concat([newContact]),
       };
     });
@@ -83,6 +85,18 @@ class ContactIndex extends React.Component {
         contactList: prevState.contactList.filter(
           (listContact) => listContact.id !== contact.id
         ),
+      };
+    });
+  };
+
+  handleAddRandomContact = (newContact) => {
+    let contactLength = this.state.contactList.length;
+    newContact.id = contactLength;
+
+    this.setState((prevState) => {
+      return {
+        //appends the newContact to the end of the list
+        contactList: prevState.contactList.concat([newContact]),
       };
     });
   };
@@ -112,14 +126,16 @@ class ContactIndex extends React.Component {
         <div className="container" style={{ minHeight: "85vh" }}>
           {/* vh = vertical height */}
           <div className="row py-3">
-            <div className="col-4 offset-2">
-              <AddRandomContact />
+            <div className="col-4 offset-2 row">
+              <AddRandomContact
+                handleAddRandomContact={this.handleAddRandomContact}
+              />
             </div>
-            <div className="col-4">
+            <div className="col-4 row">
               <RemoveAllContacts />
             </div>
             <div className="row py-2">
-              <div className="col-8 offset-2">
+              <div className="col-8 offset-2 row">
                 <AddContact handleAddContact={this.handleAddContact} />
               </div>
             </div>

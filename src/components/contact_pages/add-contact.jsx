@@ -12,16 +12,22 @@ class AddContact extends React.Component {
     };
   }
 
-  handleAddContactFormSubmit = (e) => {
-    //do not submit the form
-    e.preventDefault();
-
+  createContact = (e) => {
     const contact = {
       name: e.target.elements.contactName.value.trim(),
       email: e.target.elements.contactEmail.value.trim(),
       phone: e.target.elements.contactPhone.value.trim(),
       isFavorite: false,
     };
+
+    return contact;
+  };
+
+  handleAddContactFormSubmit = (e) => {
+    //do not submit the form
+    e.preventDefault();
+
+    const contact = this.createContact(e);
 
     const response = this.props.handleAddContact(contact);
 
