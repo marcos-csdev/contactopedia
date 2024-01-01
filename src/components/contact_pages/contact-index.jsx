@@ -89,6 +89,16 @@ class ContactIndex extends React.Component {
     });
   };
 
+  handleDeleteAllContacts = () => {
+    if (this.state.contactList.length === 0) return null;
+
+    this.setState(() => {
+      return {
+        contactList: [],
+      };
+    });
+  };
+
   handleAddRandomContact = (newContact) => {
     let contactLength = this.state.contactList.length;
     newContact.id = contactLength;
@@ -132,7 +142,9 @@ class ContactIndex extends React.Component {
               />
             </div>
             <div className="col-4 row">
-              <RemoveAllContacts />
+              <RemoveAllContacts
+                handleDeleteAllContacts={this.handleDeleteAllContacts}
+              />
             </div>
             <div className="row py-2">
               <div className="col-8 offset-2 row">
