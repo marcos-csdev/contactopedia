@@ -1,4 +1,4 @@
-import Contact from "./contact";
+import CallContacts from "./call-contacts";
 
 const GeneralContacts = (props) => {
   return (
@@ -7,16 +7,7 @@ const GeneralContacts = (props) => {
       style={{ borderRadius: "10px", backgroundColor: "#323637" }}
     >
       <div className="text-center text-white-50">Other Contacts</div>
-      <div className="p-2">
-        {props.contacts.map((contact, index) => (
-          <Contact
-            contact={contact}
-            key={index}
-            favoriteClick={props.favoriteClick}
-            deleteClick={props.deleteClick}
-          ></Contact>
-        ))}
-      </div>
+      <div className="p-2">{CallContacts(props)}</div>
     </div>
   );
 };

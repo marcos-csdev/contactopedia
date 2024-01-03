@@ -43,7 +43,11 @@ class Contact extends React.Component {
 
         <div className="col-2 col-md-3 pt-md-3">
           <button className="btn btn-primary btn-sm m-1">
-            <i className="bi bi-pencil-square" style={{ fontSize: "1rem" }}></i>
+            <i
+              className="bi bi-pencil-square"
+              style={{ fontSize: "1rem" }}
+              onClick={() => this.props.updateClick(this.props.contact)}
+            ></i>
           </button>
           <button className="btn btn-danger btn-sm m-1">
             <i

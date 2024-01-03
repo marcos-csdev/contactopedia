@@ -6,6 +6,8 @@ import AddContact from "./add-contact";
 import FavoriteContacts from "./favorite-contacts";
 import GeneralContacts from "./general-contacts";
 import Footer from "../page_sections/footer";
+import ErrorBoundary from "../error-boundary";
+import EditContact from "./edit-contact";
 
 class ContactIndex extends React.Component {
   constructor(props) {
@@ -34,6 +36,8 @@ class ContactIndex extends React.Component {
           isFavorite: true,
         },
       ],
+      selectedContact: null,
+      // isUpdating:false
     };
   }
 
@@ -111,6 +115,14 @@ class ContactIndex extends React.Component {
     });
   };
 
+  //continue from here
+  handleEditContact = (contact) => {
+    document.getElementById("add-contact-div").style.display = "none";
+    document.getElementById("edit-contact-div").style.display = "block";
+
+    this.setState({ selectedContact: contact });
+  };
+
   handleToggleFavorites = (contact) => {
     if (contact === null) return null;
 
@@ -129,53 +141,81 @@ class ContactIndex extends React.Component {
     });
   };
 
+  filterFavorites = (isFavorite) => {
+    if (this.state.contactList === undefined) return null;
+
+    if (Array.isArray(this.state.contactList)) {
+      return this.state.contactList.filter(
+        (contact) => contact.isFavorite === isFavorite
+      );
+    }
+
+    return this.state.contactList.isFavorite === isFavorite
+      ? this.state.contactList
+      : null;
+  };
+
   render() {
     return (
       <div>
-        <Headers />
-        <div className="container" style={{ minHeight: "85vh" }}>
-          {/* vh = vertical height */}
-          <div className="row py-3">
-            <div className="col-4 offset-2 row">
-              <AddRandomContact
-                handleAddRandomContact={this.handleAddRandomContact}
-              />
-            </div>
-            <div className="col-4 row">
-              <RemoveAllContacts
-                handleDeleteAllContacts={this.handleDeleteAllContacts}
-              />
-            </div>
-            <div className="row py-2">
-              <div className="col-8 offset-2 row">
-                <AddContact handleAddContact={this.handleAddContact} />
-              </div>
-            </div>
-            <div className="row py-2">
-              <div className="col-8 offset-2 row">
-                <FavoriteContacts
-                  contacts={this.state.contactList.filter(
-                    (contact) => contact.isFavorite === true
-                  )}
-                  favoriteClick={this.handleToggleFavorites}
-                  deleteClick={this.handleDeleteContact}
+        <ErrorBoundary>
+          <Headers />
+          <div className="container" style={{ minHeight: "85vh" }}>
+            {/* vh = vertical height */}
+            <div className="row py-3">
+              <div className="col-4 offset-2 row">
+                <AddRandomContact
+                  handleAddRandomContact={this.handleAddRandomContact}
                 />
               </div>
-            </div>
-            <div className="row py-2">
-              <div className="col-8 offset-2 row">
-                <GeneralContacts
-                  contacts={this.state.contactList.filter(
-                    (contact) => contact.isFavorite === false
-                  )}
-                  favoriteClick={this.handleToggleFavorites}
-                  deleteClick={this.handleDeleteContact}
+              <div className="col-4 row">
+                <RemoveAllContacts
+                  handleDeleteAllContacts={this.handleDeleteAllContacts}
                 />
+              </div>
+              <div className="row py-2" id="add-contact-div">
+                <div className="col-8 offset-2 row">
+                  <AddContact handleAddContact={this.handleAddContact} />
+                </div>
+              </div>
+              <div
+                style={{ display: "none" }}
+                className="row py-2"
+                id="edit-contact-div"
+              >
+                <div className="col-8 offset-2 row">
+                  {this.state.selectedContact != null && (
+                    <EditContact
+                      handleEditContact={this.handleEditContact}
+                      contact={this.state.selectedContact}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="row py-2">
+                <div className="col-8 offset-2 row">
+                  <FavoriteContacts
+                    contacts={this.filterFavorites(true)}
+                    favoriteClick={this.handleToggleFavorites}
+                    updateClick={this.handleEditContact}
+                    deleteClick={this.handleDeleteContact}
+                  />
+                </div>
+              </div>
+              <div className="row py-2">
+                <div className="col-8 offset-2 row">
+                  <GeneralContacts
+                    contacts={this.filterFavorites(false)}
+                    favoriteClick={this.handleToggleFavorites}
+                    updateClick={this.handleEditContact}
+                    deleteClick={this.handleDeleteContact}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <Footer />
+          <Footer />
+        </ErrorBoundary>
       </div>
     );
   }
