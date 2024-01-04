@@ -3,11 +3,10 @@ import Headers from "../page_sections/headers";
 import AddRandomContact from "./add-random-contact";
 import RemoveAllContacts from "./remove-contacts";
 import AddContact from "./add-contact";
-import FavoriteContacts from "./favorite-contacts";
-import GeneralContacts from "./general-contacts";
 import Footer from "../page_sections/footer";
 import ErrorBoundary from "../error-boundary";
 import EditContact from "./edit-contact";
+import SharedContacts from "./shared-contacts";
 
 class ContactIndex extends React.Component {
   constructor(props) {
@@ -245,21 +244,23 @@ class ContactIndex extends React.Component {
               </div>
               <div className="row py-2">
                 <div className="col-8 offset-2 row">
-                  <FavoriteContacts
+                  <SharedContacts
                     contacts={this.filterFavorites(true)}
                     favoriteClick={this.handleToggleFavorites}
                     updateClick={this.handleUpdateClick}
                     deleteClick={this.handleDeleteContact}
+                    label={"Favorites"}
                   />
                 </div>
               </div>
               <div className="row py-2">
                 <div className="col-8 offset-2 row">
-                  <GeneralContacts
+                  <SharedContacts
                     contacts={this.filterFavorites(false)}
                     favoriteClick={this.handleToggleFavorites}
                     updateClick={this.handleUpdateClick}
                     deleteClick={this.handleDeleteContact}
+                    label={"Other Contacts"}
                   />
                 </div>
               </div>
