@@ -22,11 +22,30 @@ class EditContact extends React.Component {
     this.contactPhone.current.value = this.props.contact.phone;
   }
 
+  handleCancel = () => {
+    document.querySelector(".edit-contact-form").reset();
+    this.props.cancelEditContact();
+  };
+
+  createContact(e) {
+    const updatedContact = {
+      id: this.props.contact.id,
+      name: e.target.elements.contactName.value.trim(),
+      phone: e.target.elements.contactPhone.value.trim(),
+      email: e.target.elements.contactEmail.value.trim(),
+      isFavorite: this.props.contact.isFavorite,
+    };
+
+    return updatedContact;
+  }
+
   handleEditContactFormSubmit = (e) => {
     e.preventDefault();
 
+    const updatedContact = this.createContact(e);
+
     //takes the return from the handleEditContact function at contact-index component
-    const response = this.props.handleEditContact(this.props.contact);
+    const response = this.props.editContact(updatedContact);
 
     if (response.status === "success") {
       this.setState({ errorMessage: undefined, successMessage: response.msg });
@@ -86,7 +105,10 @@ class EditContact extends React.Component {
                 </div>
 
                 <div className="col-md-6 p-1">
-                  <button className="btn btn-danger btn-sm form-control">
+                  <button
+                    className="btn btn-danger btn-sm form-control"
+                    onClick={this.handleCancel}
+                  >
                     Cancel
                   </button>
                 </div>

@@ -48,8 +48,9 @@ class ContactIndex extends React.Component {
 
     const hasDuplicates = this.state.contactList.filter((contact) => {
       if (
-        contact.name === newContact.name ||
-        contact.phone === newContact.phone
+        contact.name === newContact.name &&
+        contact.phone === newContact.phone &&
+        contact.email === newContact.email
       ) {
         return true;
       }
@@ -142,11 +143,16 @@ class ContactIndex extends React.Component {
     if (validationMessage !== true) return validationMessage;
 
     //index = id - 1
-    const index = updatedContact.id--;
+    let updatedIndex = updatedContact.id;
+    updatedIndex--;
 
     this.setState((prevState) => {
+      const updatedList = prevState.contactList.map((contact, index) => {
+        if (index === updatedIndex) return updatedContact;
+        else return contact;
+      });
       return {
-        contactList: (prevState.contactList[index] = updatedContact),
+        contactList: updatedList,
       };
     });
 
@@ -231,7 +237,8 @@ class ContactIndex extends React.Component {
                   {this.state.selectedContact != null && (
                     <EditContact
                       contact={this.state.selectedContact}
-                      handleEditContact={this.handleEditContact}
+                      editContact={this.handleEditContact}
+                      cancelEditContact={this.handleCancelEditContact}
                     />
                   )}
                 </div>
