@@ -10,14 +10,22 @@ class EditContact extends React.Component {
       errorMessage: undefined,
       successMessage: undefined,
     };
+
+    this.contactName = React.createRef();
+    this.contactEmail = React.createRef();
+    this.contactPhone = React.createRef();
+  }
+
+  componentDidMount() {
+    this.contactName.current.value = this.props.contact.name;
+    this.contactEmail.current.value = this.props.contact.email;
+    this.contactPhone.current.value = this.props.contact.phone;
   }
 
   handleEditContactFormSubmit = (e) => {
     e.preventDefault();
 
-    //const contact = this.getContact(e);
-
-    //takes the return from the handleEditContact function at contact-index
+    //takes the return from the handleEditContact function at contact-index component
     const response = this.props.handleEditContact(this.props.contact);
 
     if (response.status === "success") {
@@ -28,8 +36,6 @@ class EditContact extends React.Component {
       this.setState({ errorMessage: response.msg, successMessage: undefined });
       toast.error(response.msg, "Error");
     }
-    document.getElementById("add-contact-div").style.visibility = "block";
-    document.getElementById("edit-contact-div").style.visibility = "none";
   };
 
   render() {
@@ -48,7 +54,7 @@ class EditContact extends React.Component {
                   type="text"
                   placeholder="Name.."
                   name="contactName"
-                  value={this.props.contact.name}
+                  ref={this.contactName}
                 ></input>
               </div>
 
@@ -58,7 +64,7 @@ class EditContact extends React.Component {
                   type="text"
                   placeholder="Email.."
                   name="contactEmail"
-                  value={this.props.contact.email}
+                  ref={this.contactEmail}
                 ></input>
               </div>
               <div className="col-12 col-md-4 p-1">
@@ -67,15 +73,23 @@ class EditContact extends React.Component {
                   type="text"
                   placeholder="Phone Number.."
                   name="contactPhone"
-                  value={this.props.contact.phone}
+                  ref={this.contactPhone}
                 ></input>
               </div>
               <ToastContainer />
 
-              <div className="col-12 col-md-6 offset-md-3 p-1">
-                <button className="btn btn-primary btn-sm form-control">
-                  Edit Contact
-                </button>
+              <div className="col-12 row">
+                <div className="col-md-6 p-1">
+                  <button className="btn btn-primary btn-sm form-control">
+                    Edit Contact
+                  </button>
+                </div>
+
+                <div className="col-md-6 p-1">
+                  <button className="btn btn-danger btn-sm form-control">
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           </form>
